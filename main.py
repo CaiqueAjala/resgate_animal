@@ -47,7 +47,7 @@ def pagina_doacao(request: Request):
     return templates.TemplateResponse(
     request=request,
     name="doar.html",
-    context={"info": database.obter_info_iniciativa}
+    context={"info": database.obter_info_iniciativa()}
 
     )
 # ----------------------------------------------------

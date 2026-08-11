@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Botão Voltar -->
+<a href="/" class="btn btn-sm btn-light mb-3 shadow-sm border">
+    <i class="bi bi-arrow-left"></i> Voltar ao início
+</a>
+
+<h4 class="fw-bold mb-3 text-center">Adoção de {{ tipo }} 🐾</h4>
+
+<!-- Se houver animais passados pelo backend, eles aparecem aqui -->
+{% if pet_list %}
+    <div class="row g-3">
+        {% for pet in pet_list %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                
+                <!-- Carrossel de Fotos -->
+                <div id="carouselPet{{ pet.id }}" class="carousel slide">
+                    <div class="carousel-inner">
+                        {% for foto in pet.fotos %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                <img src="{{ foto }}" class="d-block w-100 foto-pet" alt="{{ pet.nome }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if pet.fotos | length > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPet{{ pet.id }}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselPet{{ pet.id }}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <!-- Informações do Pet -->
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ pet.nome }}</h5>
+                    <p class="card-text text-muted small mb-2">
+                        <strong>Idade:</strong> {{ pet.idade }} | 
+                        <strong>Porte:</strong> {{ pet.porte }} | 
+                        <strong>Raça:</strong> {{ pet.raça }}
+                    </p>
+                    <p class="card-text text-secondary small">{{ pet.descricao }}</p>
+                    <a href="https://wa.me/55{{ info.whatsapp }}?text=Tenho%20interesse%20em%20adotar%20o(a)%20{{ pet.nome }}" 
+                       target="_blank" 
+                       class="btn btn-success w-100 fw-bold rounded-3">
+                        <i class="bi bi-whatsapp me-2"></i> Quero Adotar
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center rounded-4 shadow-sm">
+        <p class="mb-0 small">Nenhum {{ tipo | lower }} cadastrado no momento ou lista em carregamento.</p>
+    </div>
+{% endif %}
+{% endblock %}

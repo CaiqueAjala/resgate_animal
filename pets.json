@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "nome": "Ragnar",
+        "especie": "cachorro",
+        "raca": "Bullboxer",
+        "idade": "1 ano",
+        "porte": "Médio",
+        "descricao": "Ragnar é um cão dócil, brincalhão e carinhoso.",
+        "fotos": [
+            "/static/img/ragnar.jpeg",
+            "/static/img/ragnar2.jpeg"
+        ]
+    },
+    {
+        "nome": "Nani",
+        "especie": "gato",
+        "raca": "Vira-Lata",
+        "idade": "2 anos",
+        "porte": "Pequeno",
+        "descricao": "apenas um teste",
+        "fotos": [
+            "/static/img/cauan_teste.jpeg"
+        ],
+        "id": 2
+    }
+]

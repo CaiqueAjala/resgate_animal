@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h4 class="fw-bold text-center text-rosa mb-3">Área Restrita 🔒</h4>
+            <p class="text-center text-muted small">Digite a senha para acessar o painel de cadastro de pets.</p>
+            
+            <form action="/admin/login" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Senha de Acesso:</label>
+                    <input type="password" name="senha" class="form-control rounded-3" required placeholder="Digite a senha...">
+                </div>
+                <button type="submit" class="btn btn-rosa w-100 fw-bold rounded-3">Entrar no Painel</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Botão Voltar -->
+<a href="/" class="btn btn-sm btn-light mb-3 shadow-sm border">
+    <i class="bi bi-arrow-left"></i> Voltar ao início
+</a>
+
+<div class="card border-0 shadow-sm rounded-4 text-center p-3">
+    <div class="card-body">
+        <div class="mb-3">
+    <!-- Gera a imagem do QR Code em tempo real a partir da chave Pix -->
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=adocaodepetsssa@gmail.com
+" 
+         alt="QR Code Pix" 
+         class="img-fluid rounded-3 border p-2 bg-white shadow-sm" 
+         style="max-width: 180px;">
+</div>
+        <h4 class="fw-bold mb-2">Ajude a Manter Nossas Resgates</h4>
+        <p class="text-muted small mb-4">Qualquer valor ajuda a cobrir custos com ração, vacinas e consultas veterinárias.</p>
+
+        <!-- Box da Chave PIX -->
+        <div class="bg-light p-3 rounded-3 border mb-3">
+            <span class="d-block text-uppercase small text-muted fw-bold mb-1">Chave PIX </span>
+            <code class="fs-6 text-dark fw-bold" id="chavePix">adocaodepetsssa@gmail.com</code>
+        </div>
+
+        <p class="small text-muted mb-0"><strong>Titular:</strong> Thailane da Silva Sacerdote</p>
+    </div>
+</div>
+{% endblock %}

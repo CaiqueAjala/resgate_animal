@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold text-rosa m-0">Painel de Administração 🐾</h4>
+    <a href="/admin/logout" class="btn btn-outline-danger btn-sm rounded-3">Sair</a>
+</div>
+
+<!-- Formulário de Cadastro -->
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <h5 class="fw-bold mb-3">Cadastrar Novo Pet</h5>
+    
+    <!-- IMPORTANTE: enctype="multipart/form-data" é OBRIGATÓRIO para envio de arquivos -->
+    <form action="/admin/cadastrar" method="POST" enctype="multipart/form-data">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">Nome do Pet:</label>
+                <input type="text" name="nome" class="form-control" required placeholder="Ex: Mel">
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label small fw-bold">Espécie:</label>
+                <select name="especie" class="form-select" required>
+                    <option value="cachorro">Cachorro</option>
+                    <option value="gato">Gato</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Raça:</label>
+                <input type="text" name="raca" class="form-control" placeholder="Ex: Poodle ou SRD">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Idade:</label>
+                <input type="text" name="idade" class="form-control" required placeholder="Ex: 2 anos">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label small fw-bold">Porte:</label>
+                <select name="porte" class="form-select" required>
+                    <option value="Pequeno">Pequeno</option>
+                    <option value="Médio">Médio</option>
+                    <option value="Grande">Grande</option>
+                </select>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label small fw-bold">Descrição / História:</label>
+                <textarea name="descricao" class="form-control" rows="2" required placeholder="Conte um pouco sobre o pet..."></textarea>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label small fw-bold">Foto do Pet:</label>
+                <input type="file" name="foto" class="form-control" accept="image/*" required>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success w-100 fw-bold rounded-3">Cadastrar e Publicar Pet</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Lista de Pets Cadastrados -->
+<div class="card border-0 shadow-sm rounded-4 p-4">
+    <h5 class="fw-bold mb-3">Pets no Sistema ({{ pets | length }})</h5>
+    <ul class="list-group list-group-flush">
+        {% for pet in pets %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ pet.nome }}</strong> ({{ pet.especie | capitalize }}) - {{ pet.raca }}
+                </div>
+                <span class="badge bg-secondary rounded-pill">{{ pet.idade }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

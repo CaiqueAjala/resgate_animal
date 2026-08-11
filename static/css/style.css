@@ -1,0 +1,73 @@
+
+/* static/css/style.css */
+
+/* --------------------------------------------------
+   1. ESTILOS GERAIS DA PÁGINA
+-------------------------------------------------- */
+body {
+    background-color: #FFF0F5 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --------------------------------------------------
+   2. CORES E IDENTIDADE VISUAL
+-------------------------------------------------- */
+/* Cor destaque nos títulos e bordas */
+.text-rosa {
+    color: #FF007F !important;
+}
+
+/* Botão principal (Doação / Destaque) */
+.btn-rosa {
+    background-color: #FF007F !important;
+    color: #FFFFFF !important;
+    border: none;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-rosa:hover {
+    background-color: #E0006F !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+}
+
+/* Botões secundários com borda rosa */
+.btn-outline-rosa {
+    color: #FF007F !important;
+    border-color: #FF007F !important;
+    background-color: #FFFFFF !important;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-outline-rosa:hover {
+    background-color: #FF007F !important;
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+}
+
+/* Ajuste fino na foto de perfil/logo no topo */
+.logo-perfil {
+    border: 3px solid #FF007F;
+    padding: 3px;
+    background-color: #FFFFFF;
+}
+
+/* --------------------------------------------------
+   3. PADRONIZAÇÃO DE FOTOS E CARROSSEL DOS PETS
+-------------------------------------------------- */
+/* Trava a altura e o corte proporcional de TODAS as fotos dos pets */
+.foto-pet {
+    height: 480px !important;
+    min-height: 480px !important;
+    max-height: 480px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+}
+
+/* Força a estrutura do carrossel do Bootstrap a não esticar o cartão */
+.carousel-inner, 
+.carousel-item {
+    height: 480px !important;
+    max-height: 480px !important;
+    overflow: hidden !important;
+}

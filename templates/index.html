@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-grid gap-3">
+    <!-- Botão Doar com a cor do logo -->
+    <a href="/doar" class="btn btn-rosa btn-lg fw-bold shadow-sm py-3">
+        <i class="bi bi-heart-fill me-2"></i> Quero Ajudar / Fazer PIX
+    </a>
+
+    <!-- Botão Cachorros -->
+    <a href="/animais/cachorros" class="btn btn-outline-rosa btn-lg shadow-sm py-3 fw-bold">
+        <i class="bi bi-person-heart me-2"></i> Adotar um Cachorro 🐶
+    </a>
+
+    <!-- Botão Gatos -->
+    <a href="/animais/gatos" class="btn btn-outline-rosa btn-lg shadow-sm py-3 fw-bold">
+        <i class="bi bi-heart-pulse me-2"></i> Adotar um Gato 🐱
+    </a>
+</div>
+
+<!-- Cartão Sobre a Iniciativa -->
+<div class="card mt-4 border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <h5 class="card-title fw-bold text-center mb-3">Sobre o Nosso Trabalho</h5>
+        <p class="card-text text-secondary small" style="line-height: 1.6;">
+            Somos uma iniciativa independente focada no resgate, reabilitação e encaminhamento de animais abandonados para lares responsáveis. Toda ajuda faz a diferença na vida deles!
+        </p>
+    </div>
+</div>
+{% endblock %}

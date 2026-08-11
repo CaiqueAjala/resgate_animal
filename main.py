@@ -42,7 +42,7 @@ def listar_animais(request: Request, especie: str):
     )
 
 #Doação Pix
-@app.get("/doacao")
+@app.get("/doar")
 def pagina_doacao(request: Request):
     return templates.TemplateResponse(
     request=request,

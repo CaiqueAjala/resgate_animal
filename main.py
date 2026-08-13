@@ -4,10 +4,26 @@ from fastapi import FastAPI, Request, Form, File, UploadFile, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import cloudinary
+import cloudinary.uploader
+from database import init_db, obter_pets, salvar_pet,obter_animais_por_especie, obter_info_iniciativa
 
-import database
+
+# Configura o Cloudinary com as chaves do .env
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
+
+
 
 app = FastAPI()
+
+# Inicializa o banco ao subir a aplicação
+@app.on_event("startup")
+def startup():
+    init_db()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -22,23 +38,21 @@ def home(request: Request):
     return templates.TemplateResponse(
         request=request, 
         name="index.html", 
-        context={"info": database.obter_info_iniciativa()}
+        context={"info": obter_info_iniciativa()}
     )
 #Rota de doação dos animais
 @app.get("/animais/{especie}")
 def listar_animais(request: Request, especie: str):
     tipo_map = {"cachorros": "cachorro", "gatos": "gato"}
     especie_filtrada = tipo_map.get(especie, "cachorro")
-    pet_list = database.obter_animais_por_especie(especie_filtrada)
     
+    # Chama a função direto sem a palavra "database." na frente
+    pet_list = obter_animais_por_especie(especie_filtrada)
+
     return templates.TemplateResponse(
-        request=request, 
-        name="animais.html", 
-        context={
-            "pet_list": pet_list, 
-            "tipo": especie.capitalize(),
-            "info": database.obter_info_iniciativa()
-        }
+        request=request,
+        name="animais.html",
+        context={"request": request, "pets": pet_list, "info": obter_info_iniciativa()}
     )
 
 #Doação Pix
@@ -47,7 +61,7 @@ def pagina_doacao(request: Request):
     return templates.TemplateResponse(
     request=request,
     name="doar.html",
-    context={"info": database.obter_info_iniciativa()}
+    context={"info": obter_info_iniciativa()}
 
     )
 # ----------------------------------------------------
@@ -71,54 +85,34 @@ def admin_login(senha: str = Form(...)):
     return RedirectResponse(url="/admin/login?erro=1", status_code=303)
 
 # 3. Painel Administrativo (Protegido por Cookie)
+# 3. Painel Administrativo (Protegido por Cookie)
 @app.get("/admin/painel", response_class=HTMLResponse)
 def admin_painel(request: Request, admin_access: str = Cookie(None)):
     # Validação: Se não tiver o cookie correto, redireciona pro login
     if admin_access != "logged_in":
         return RedirectResponse(url="/admin/login", status_code=303)
-        
-    pets = database.carregar_pets()
-    # ✅ Forma correta:
+    
+    # 🔍 Busca todos os pets cadastrados direto do Banco de Dados (Supabase)
+    pets = obter_pets()
+
+    # Retorna o template passando a lista 'pets' que acabamos de buscar
     return templates.TemplateResponse(
-        request=request, 
-        name="admin_painel.html", 
-        context={"pets": pets}
+        request=request,
+        name="admin_painel.html",
+        context={"request": request, "pets": pets}
     )
 # 4. Rota para Cadastrar Novo Pet
-@app.post("/admin/cadastrar")
-async def cadastrar_pet(
+@app.post("/admin/adicionar")
+async def adicionar_pet(
     nome: str = Form(...),
     especie: str = Form(...),
-    raca: str = Form("SRD"),
     idade: str = Form(...),
-    porte: str = Form(...),
     descricao: str = Form(...),
     foto: UploadFile = File(...),
     admin_access: str = Cookie(None)
 ):
     if admin_access != "logged_in":
         return RedirectResponse(url="/admin/login", status_code=303)
-
-    # 1. Salva o arquivo da foto na pasta static/img/
-    caminho_foto_local = f"static/img/{foto.filename}"
-    with open(caminho_foto_local, "wb") as buffer:
-        shutil.copyfileobj(foto.file, buffer)
-
-    # 2. Prepara o dicionário do novo pet
-    novo_pet = {
-        "nome": nome,
-        "especie": especie,
-        "raca": raca,
-        "idade": idade,
-        "porte": porte,
-        "descricao": descricao,
-        "fotos": [f"/static/img/{foto.filename}"]
-    }
-
-    # 3. Salva no JSON através do database.py
-    database.adicionar_novo_pet(novo_pet)
-
-    return RedirectResponse(url="/admin/painel", status_code=303)
 
 # 5. Rota para Sair/Logout
 @app.get("/admin/logout")

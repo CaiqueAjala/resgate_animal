@@ -9,6 +9,7 @@ import cloudinary.uploader
 from database import init_db, obter_pets, salvar_pet,obter_animais_por_especie, obter_info_iniciativa
 
 
+
 # Configura o Cloudinary com as chaves do .env
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -19,6 +20,7 @@ cloudinary.config(
 
 
 app = FastAPI()
+SENHA_ADMIN = os.getenv("ADMIN_PASSWORD", "senha_temporaria_123")
 
 # Inicializa o banco ao subir a aplicação
 @app.on_event("startup")
@@ -27,8 +29,6 @@ def startup():
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-
-SENHA_ADMIN = "CAUANnani@94"  
 
 # ----------------------------------------------------
 # ROTAS PÚBLICAS
@@ -83,7 +83,6 @@ def admin_login(senha: str = Form(...)):
         return response
     
     return RedirectResponse(url="/admin/login?erro=1", status_code=303)
-
 # 3. Painel Administrativo (Protegido por Cookie)
 # 3. Painel Administrativo (Protegido por Cookie)
 @app.get("/admin/painel", response_class=HTMLResponse)

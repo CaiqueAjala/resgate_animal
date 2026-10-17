@@ -8,29 +8,32 @@
 
 <h4 class="fw-bold mb-3 text-center">Adoção de {{ tipo }} 🐾</h4>
 
-<!-- Se houver animais passados pelo backend, eles aparecem aqui -->
-{% if pet_list %}
+{% if pets %}
     <div class="row g-3">
-        {% for pet in pet_list %}
+        {% for pet in pets %}
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 
-                <!-- Carrossel de Fotos -->
-                <div id="carouselPet{{ pet.id }}" class="carousel slide">
+                <!-- Carrossel de Fotos (Preparado para múltiplas fotos ou foto única) -->
+                <div id="carouselPet{{ pet.id }}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        {% for foto in pet.fotos %}
+                        <!-- Divide a string de URLs por vírgula para criar os itens do carrossel -->
+                        {% set lista_fotos = pet.foto.split(',') if pet.foto else [] %}
+                        {% for foto in lista_fotos %}
                             <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                <img src="{{ foto }}" class="d-block w-100 foto-pet" alt="{{ pet.nome }}">
+                                <img src="{{ foto.strip() }}" class="d-block w-100" alt="{{ pet.nome }}" style="height: 300px; object-fit: cover;">
                             </div>
                         {% endfor %}
                     </div>
-                    
-                    {% if pet.fotos | length > 1 %}
+                    <!-- Botões de avançar/recuar só aparecem se houver mais de uma foto -->
+                    {% if lista_fotos | length > 1 %}
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselPet{{ pet.id }}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carouselPet{{ pet.id }}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Próximo</span>
                         </button>
                     {% endif %}
                 </div>
@@ -41,9 +44,10 @@
                     <p class="card-text text-muted small mb-2">
                         <strong>Idade:</strong> {{ pet.idade }} | 
                         <strong>Porte:</strong> {{ pet.porte }} | 
-                        <strong>Raça:</strong> {{ pet.raça }}
+                        <strong>Raça:</strong> {{ pet.raca }}
                     </p>
                     <p class="card-text text-secondary small">{{ pet.descricao }}</p>
+                    
                     <a href="https://wa.me/55{{ info.whatsapp }}?text=Tenho%20interesse%20em%20adotar%20o(a)%20{{ pet.nome }}" 
                        target="_blank" 
                        class="btn btn-success w-100 fw-bold rounded-3">
@@ -57,7 +61,7 @@
     </div>
 {% else %}
     <div class="alert alert-info text-center rounded-4 shadow-sm">
-        <p class="mb-0 small">Nenhum {{ tipo | lower }} cadastrado no momento ou lista em carregamento.</p>
+        <p class="mb-0 small">Nenhum {{ tipo | lower }} cadastrado no momento.</p>
     </div>
 {% endif %}
 {% endblock %}

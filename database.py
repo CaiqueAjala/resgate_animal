@@ -67,6 +67,8 @@ class PetModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, nullable=False)
     especie = Column(String, nullable=False)
+    raca = Column(String, nullable=True)
+    porte = Column(String, nullable=True)
     idade = Column(String, nullable=False)
     descricao = Column(String, nullable=False)
     foto = Column(
@@ -89,12 +91,14 @@ def obter_pets():
 
 
 def salvar_pet(
-    nome: str, especie: str, idade: str, descricao: str, foto_url: str
+    nome: str,raca: str, porte: str, especie: str, idade: str, descricao: str, foto_url: str
 ):
     db = SessionLocal()
     try:
         novo_pet = PetModel(
             nome=nome,
+            raca=raca,
+            porte=porte,
             especie=especie,
             idade=idade,
             descricao=descricao,

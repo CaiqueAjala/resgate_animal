@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import cloudinary
 import cloudinary.uploader
+from typing import List
 from database import init_db, obter_pets, salvar_pet,obter_animais_por_especie, obter_info_iniciativa
 
 
@@ -101,18 +102,39 @@ def admin_painel(request: Request, admin_access: str = Cookie(None)):
         context={"request": request, "pets": pets}
     )
 # 4. Rota para Cadastrar Novo Pet
-@app.post("/admin/adicionar")
-async def adicionar_pet(
+@app.post("/admin/cadastrar")
+async def cadastrar_pet(
     nome: str = Form(...),
     especie: str = Form(...),
+    raca: str = Form(None),
     idade: str = Form(...),
+    porte: str = Form(...),
     descricao: str = Form(...),
-    foto: UploadFile = File(...),
+    fotos: List[UploadFile] = File(...), # Alterado para aceitar múltiplos ficheiros
     admin_access: str = Cookie(None)
 ):
     if admin_access != "logged_in":
         return RedirectResponse(url="/admin/login", status_code=303)
+    
+    urls_fotos = []
+    for foto in fotos:
+        upload_result = cloudinary.uploader.upload(foto.file)
+        urls_fotos.append(upload_result.get("secure_url"))
+    
+    # Junta todas as URLs numa única string separada por vírgula
+    fotos_string = ",".join(urls_fotos)
 
+    salvar_pet(
+        nome=nome, 
+        especie=especie, 
+        raca=raca, 
+        idade=idade, 
+        porte=porte, 
+        descricao=descricao, 
+        foto_url=fotos_string # Guarda a string com todas as URLs
+    )
+
+    return RedirectResponse(url="/admin/painel", status_code=303)
 # 5. Rota para Sair/Logout
 @app.get("/admin/logout")
 def logout():
